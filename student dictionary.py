@@ -37,14 +37,33 @@ def add():
     age = force_number("Enter students age: ")
     students.append(dict())
     for student in students:
-        print(student)
         if student.get("name") == None:
             student["name"] = name
+            student["eye colour"] = eye_colour
+            student["age"] = age
 
-    print(students)
-            
-            
-    
+    print("Student added")
+
+def change_age():
+    student_change = input("Enter the name of the student whose age you want to change: ").strip().title()
+    for student in students:
+        
+        if student.get("name") == student_change:
+            age = force_number("Enter students age you want to change it to: ")
+            student["age"]  = age
+            break
+
+        
+
+def delete():
+    student_delete = input("Enter name of student you want to delete: ").strip().title()
+    print(student_delete)
+    for student in students:
+        if student.get("name") == student_delete:
+            print("You have removed {} from the list".format(student_delete))
+            students.remove(student)
+            break
+        
 
 if __name__ == "__main__":
     students = [
@@ -55,11 +74,22 @@ if __name__ == "__main__":
     ]
 
     valid = False
+    option = 0
+    menu()
     while valid is False:
         option = force_number("Enter option: ")
         valid = valid_option(option)
 
-    print("yes")
-    add()
-    
+    if option == 1:
+        add()
+
+    if option == 2:
+        change_age()
+
+    if option == 3:
+        delete()
+
+    print(students)
+        
+        
 
