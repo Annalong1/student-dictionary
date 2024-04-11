@@ -1,10 +1,11 @@
 ##
 # Student Directory
 
-#functions
+# functions
 def menu():
     """print menu"""
-    
+
+    # print menu
     print("""
     Options:
     1. Add a student
@@ -27,12 +28,12 @@ def force_number(message):
             return number
             
         except ValueError:
-            print("You must enter a integer")
+            print("You must enter an integer")
 
 def valid_option(option):
     """Check if option is within range"""
 
-    #constants
+    # constants
     MAX_OPTION = 7
     MIN_OPTION = 1
 
@@ -42,26 +43,24 @@ def valid_option(option):
         # change valid to false becuase option is not within range
         valid = False
         print("That is not an available option")
+        
+    # if option is in range set vaild to true
     else:
         valid = True
 
     #return valid
     return valid
 
-def add():
+def add_student(name, eye_colour, age):
     """add a student to dictionary"""
-
-    # ask user for relevant information
-    name = input("Enter student name: ").strip().title()
-    eye_colour = input("Enter students eye colour: ").strip().lower()
-    age = force_number("Enter students age: ")
-
-    # add student to dictionary
+    
+    # append new dictionary to list
     students.append(dict())
 
     # loop through student dictionaries
     for student in students:
-        
+
+        # find dictionary that is empty and add users information
         if student.get("name") == None:
             student["name"] = name
             student["eye colour"] = eye_colour
@@ -69,45 +68,49 @@ def add():
             
     print("Student added")
 
-def change_age():
+def change_age(student_change):
     """change a students age"""
     
     change = False
 
-    # ask user for students name
-    student_change = input("Enter the name of the student whose age you want to change: ").strip().title()
-
-    #loop through student dictionaries
+    # loop through student dictionaries
     for student in students:
-        
+
+        # find which dictionary contains the student the user wants to change the age of
         if student.get("name") == student_change:
+
+            #forcing user to enter age as interger and change chosen student age to that
             age = force_number("Enter students age you want to change it to: ")
             student["age"]  = age
-            change = True
-            break
+            print("{} age has been changed".format(student["name"]))
 
-    # check if anything has been changed if not student is not in dictionary
+            #record that something has been changed
+            change = True
+
+
+    # if nothing has been changed student is not in dictionary
     if change == False:
         print("That student is not in the dictionary")
         
 
-def delete():
+def delete_student(student_delete):
     """delete a student"""
     change = False
 
-    # ask user for students name
-    student_delete = input("Enter name of student you want to delete: ").strip().title()
-
     #loop through student dictoinary
     for student in students:
-        
+
+        # find dictionary for chosen student
         if student.get("name") == student_delete:
+
+            #remove student's dictionary
             print("You have removed {} from the list".format(student_delete))
             students.remove(student)
-            change = True
-            break
 
-    # check if anything has been changed
+            # change is true 
+            change = True
+
+    # check if nothing has been changed
     if change == False:
         print("That student is not in the dictionary")
 
@@ -119,8 +122,11 @@ def list_eye_colours():
 
     # loop through student dicitonaries
     for student in students:
-        
+
+        #  take students eye colour
         eye_colour = student["eye colour"]
+
+        # if eye colour is not already in the list append it
         if eye_colour not in all_eye_colours:
             all_eye_colours.append(eye_colour)
             
@@ -130,26 +136,28 @@ def list_eye_colours():
     for colour in all_eye_colours:
         print(colour)
 
-def search_eye_colour():
+def search_eye_colour(search_colour):
     """enter an eye colour and return students who have that eye colour"""
     valid = False
 
     # create empty list to append to
     students_with_colour =[]
 
-    # ask user for eye colour
-    search_colour = input("Enter eye colour you want to know what students have: ")
-
     # loop through student dictionaries
     for student in students:
-        
+
+        # check if student had chosen eye colour, if so add student name to list
         if search_colour in student.values():
             student_name = student["name"]
             students_with_colour.append(student_name)
+
+            #record that eye colour has been found at least once
             valid = True
 
-    # check if eye colour exsits in dictionaries
+    # check if eye colour exists in dictionaries
     if valid == True:
+
+        #print students in list
         print("The students with that eye colour are:")
         for student in students_with_colour:
             print(student)
@@ -158,21 +166,21 @@ def search_eye_colour():
     else:
         print("That eye colour is not in the dictionary")
 
-def search_student_colour():
+def search_student_colour(student_name):
     """enter student and return their eye colour"""
     valid = False
-
-    # ask user for student name
-    student_name = input("Enter name of student you want to know the eye colour of: ").strip().title()
 
     # loop through student dicitonarys
     for student in students:
 
-        
+        # check if student is the student user entered
         if student.get("name") == student_name:
+
+            #print their eye colour
             print("{}'s eye colour is {}".format(student_name, student["eye colour"]))
+
+            # record that student is in dictionary
             valid = True
-            break
 
     # if student is not in dictionary
     if valid is False:
@@ -181,6 +189,8 @@ def search_student_colour():
 # main routine
 if __name__ == "__main__":
     option = 0
+
+    #dictionary of students
     students = [
         {"name": "Harini", "eye colour": "brown" , "age": 16},
         {"name": "Anna", "eye colour": "blue", "age": 15,},
@@ -188,32 +198,69 @@ if __name__ == "__main__":
         {"name": "Fleur", "eye colour": "blue", "age": 16}
     ]
 
+    #welcome user
     print("Welcome to the student directory")
+
+    #loop while user has not entered 7 to quit
     while option != 7:
 
         valid = False
+
+        #print menu
         menu()
+
+        #force user to enter vaild option
         while valid is False:
             option = force_number("Enter option: ")
             valid = valid_option(option)
-    
+
+        # do appropriate thing for each option
         if option == 1:
-            add()
+            
+            # ask user for relevant information
+            name = input("Enter student name: ").strip().title()
+            eye_colour = input("Enter students eye colour: ").strip().lower()
+            age = force_number("Enter students age: ")
+
+            # run function with arguments
+            add_student(name, eye_colour, age)
     
         elif option == 2:
-            change_age()
-    
+
+            # ask user for students name
+            student_change = input("Enter the name of the student whose age you want to change: ").strip().title()
+
+            # run function with argument
+            change_age(student_change)
+            
         elif option == 3:
-            delete()
+
+            # ask user for students name
+            student_delete = input("Enter name of student you want to delete: ").strip().title()
+
+            # run function with argument
+            delete_student(student_delete)
     
         elif option == 4:
             list_eye_colours()
     
         elif option == 5:
-            search_eye_colour()
+
+            # ask user for eye colour
+            search_colour = input("Enter eye colour you want to know what students have: ")
+
+            # run function with argument
+            search_eye_colour(search_colour)
     
         elif option == 6:
-            search_student_colour()
+
+            # ask user for student name
+            student_name = input("Enter name of student you want to know the eye colour of: ").strip().title()
+
+            # run function with argument
+            search_student_colour(student_name)
 
         elif option == 7:
+
+            #option is 7 so program will stop looping
             print("Quitting...")
